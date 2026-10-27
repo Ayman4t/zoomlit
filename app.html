@@ -116,7 +116,7 @@ function loadVideo(url){mode='vid';kf=[];ANNO.tlClear();vid.src=url;vid.onloaded
 function toast(m){const e=$('#toast');e.textContent=m;e.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>e.style.display='none',3800)}
 /* ---------- Wallpapers ---------- */
 function blobs(W,H,bg,bl,tt){ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);ctx.globalCompositeOperation='lighter';bl.forEach(([c,a,b,r,s],i)=>{const x=W*(a+.25*Math.sin(tt*s+i*2)),y=H*(b+.25*Math.cos(tt*s*.8+i)),R=Math.max(W,H)*r,gr=ctx.createRadialGradient(x,y,0,x,y,R);gr.addColorStop(0,c);gr.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gr;ctx.fillRect(0,0,W,H)});ctx.globalCompositeOperation='source-over'}
-const WALLS=['Cyberpunk grid','Midnight aurora','Sunset mesh','Obsidian glass','Violet nebula','Deep ocean','Solid color','Two-color gradient','My own image','Soft pastel (Screen Studio)'];
+const WALLS=['Cyberpunk grid','Midnight aurora','Sunset mesh','Obsidian glass','Violet nebula','Deep ocean','Solid color','Two-color gradient','My own image','Soft pastel'];
 function wallpaper(i,W,H,tt){
  if(i===0){const gr=ctx.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#07080c');gr.addColorStop(1,'#25093f');ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);ctx.lineWidth=1.5;ctx.strokeStyle='#00f3ff';const hy=H*.42,ph=(tt*.4)%1;
   for(let k=0;k<24;k++){const f=Math.pow((k+ph)/24,2);ctx.globalAlpha=.1+f*.5;ctx.beginPath();ctx.moveTo(0,hy+(H-hy)*f);ctx.lineTo(W,hy+(H-hy)*f);ctx.stroke()}
