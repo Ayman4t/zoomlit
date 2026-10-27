@@ -236,7 +236,7 @@ addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.code==='KeyZ'&&!e.sh
 /* ---------- Export ---------- */
 let rec=null,chunks=[];
 function startRec(){audio.init();const vs=cv.captureStream(S.fps),ms=new MediaStream([...vs.getVideoTracks(),...audio.dest.stream.getAudioTracks()]);
- const mt=['video/mp4;codecs=avc1','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(x=>MediaRecorder.isTypeSupported(x))||'';
+ const mt=['video/mp4;codecs=avc1.640028,mp4a.40.2','video/mp4;codecs=avc1,mp4a.40.2','video/mp4;codecs=avc1','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(x=>MediaRecorder.isTypeSupported(x))||'';
  rec=new MediaRecorder(ms,{mimeType:mt,videoBitsPerSecond:S.br,audioBitsPerSecond:S.br<3e6?96e3:128e3});chunks=[];rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
  rec.onstop=()=>{const ext=(rec.mimeType||'').includes('mp4')?'mp4':'webm',blob=new Blob(chunks,{type:rec.mimeType||'video/webm'});if(!blob.size)return toast('Nothing was recorded. Try again.');const a=$('#dl');a.href=URL.createObjectURL(blob);a.download='zoomlit-demo.'+ext;a.textContent='Download video ('+(blob.size/1048576).toFixed(1)+' MB)';a.style.display='inline-block';$('#oh').textContent='Your video is ready';$('#pb').parentNode.style.display='none';$('#pt').style.display='none';$('#cx').textContent='Close';$('#ov').style.display='grid'};rec.start(250)}
 $('#live').onclick=()=>{if(exporting==='live'){rec.stop();exporting=null;$('#live').textContent='Live record';$('#live').classList.remove('rec')}else if(!exporting){startRec();exporting='live';$('#live').textContent='Stop and save';$('#live').classList.add('rec');if(!playing)setPlay(true)}};
@@ -380,7 +380,7 @@ const classic=$('#auto').onclick,_pn=performance.now.bind(performance);let VT=nu
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 async function pick(){const W=cv.width,H=cv.height;
  for(const c of['avc1.64002A','avc1.640028','avc1.4D0028','avc1.42E01F']){try{const r=await VideoEncoder.isConfigSupported({codec:c,width:W,height:H,bitrate:S.br,framerate:S.fps});if(r.supported)return c}catch(e){}}return null}
-async function pickA(){for(const[c,m]of[['opus','opus'],['mp4a.40.2','aac']]){try{const r=await AudioEncoder.isConfigSupported({codec:c,sampleRate:48000,numberOfChannels:2,bitrate:128000});if(r.supported)return[c,m]}catch(e){}}return null}
+async function pickA(){for(const[c,m]of[['mp4a.40.2','aac']]){try{const r=await AudioEncoder.isConfigSupported({codec:c,sampleRate:48000,numberOfChannels:2,bitrate:128000});if(r.supported)return[c,m]}catch(e){}}return null}
 async function turbo(){
  const D=dur(),fps=S.fps,N=Math.floor(D*fps),W=cv.width,H=cv.height,wasMode=mode,wasPlay=playing,old={c:audio.ctx,m:audio.master,n:audio.nb};
  const vc=await pick(),ac=await pickA();if(!vc||!ac)throw new Error('codec');
