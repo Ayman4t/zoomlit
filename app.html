@@ -48,18 +48,7 @@ kbd{font:10.5px var(--mono);color:var(--mu);border:1px solid rgba(255,255,255,.1
 .swrow{display:flex;gap:8px;align-items:center;margin-top:10px}
 #a_pen2{display:none}#adock.pen-on #a_pen2{display:flex}
 @media(max-width:860px){#adock{top:auto;bottom:22px}}
-
-#land{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:24px;background:radial-gradient(900px 500px at 12% -10%,rgba(157,0,255,.28),transparent),radial-gradient(800px 500px at 100% 110%,rgba(0,243,255,.18),transparent),#07080c;overflow:auto}
-#land .in{width:min(640px,100%)}
-#land h1{font-size:clamp(30px,6vw,52px);line-height:1.05;font-weight:700;letter-spacing:-.5px;margin:6px 0 14px}
-#land p{color:var(--mu);font-size:16px;line-height:1.55;max-width:56ch}
-#land ul{list-style:none;padding:0;margin:20px 0;display:grid;gap:8px;color:var(--tx);font-size:14.5px}
-#land li:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--cy);box-shadow:0 0 10px var(--cy);margin-right:10px}
-#land .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
-#land .cta button{padding:13px 20px;font-size:15px;border-radius:11px}
-#land small{display:block;margin-top:18px;color:var(--mu);font-size:12.5px;line-height:1.5;max-width:60ch}
 </style></head><body>
-<div id="land" role="dialog" aria-labelledby="lh"><div class="in"><div class="brand"><b>Zoom</b>lit Studio</div><h1 id="lh">Make your screen recording look like a pro demo. Free, in your browser.</h1><p>Record your screen or upload a video, hold <kbd>Z</kbd> to zoom where it matters, and export for YouTube, Reels or TikTok.</p><ul><li>No sign-up, no install, no watermark</li><li>Your video never leaves your device</li><li>Smooth auto-zoom, spotlight, neon pen, blur for private data, keystroke display</li><li>Exports 16:9, 9:16 and 1:1</li></ul><div class="cta"><button class="btn-x" id="l_demo">Try the demo</button><button id="l_rec">Record your screen</button><button id="l_up">Upload a video</button></div><small>Good to know: export runs in real time, so a 10-minute video takes 10 minutes to export. Keep this tab open while it renders. Best in Chrome or Edge.</small></div></div>
 <header><div class="brand"><b>Zoom</b>lit Studio</div><div class="seg" id="ar"><button data-r="16:9" class="on">16:9 Desktop</button><button data-r="9:16">9:16 Reels/TikTok</button><button data-r="1:1">1:1 Square</button></div><div class="seg" id="fpsel" title="Export frame rate"><button data-f="30">30 FPS</button><button data-f="60" class="on">60 FPS</button></div><div class="seg" id="qsel" title="Export quality: lower = smaller file"><button data-q="14e6" class="on">High</button><button data-q="6e6">Medium</button><button data-q="2.5e6">Small</button><button data-q="1e6">Tiny</button></div><div class="hud" id="fps">—</div><button class="btn-x" id="auto">Export video (fast)</button></header>
 <aside id="side"></aside>
 <main id="main"><canvas id="stage" width="1280" height="720" aria-label="Preview stage"></canvas><div id="hudo"></div><div id="adock"><div class="ad-row"><button id="a_sp" aria-pressed="false" title="Spotlight mode (L)">&#9673; Spotlight <kbd>L</kbd></button><button id="a_pen" aria-pressed="false" title="Neon pen: drag to draw, lines vanish on their own (P). Hold Z or Space to zoom while drawing.">&#9998; Neon pen <kbd>P</kbd></button><button id="a_rec" title="Record spotlight and pen into the video timeline so exports include them">&#9679; Rec</button><button id="a_clr" title="Clear drawings (Esc)">Clear <kbd>Esc</kbd></button></div><div class="ad-row" id="a_pen2"></div></div><div id="drop">Drop a video file to load it</div></main>
@@ -257,7 +246,7 @@ $('#cx').onclick=()=>{$('#ov').style.display='none';if(exporting){exporting=null
 function finish(){exporting=null;$('#ov').style.display='none';setTimeout(()=>{rec.stop()},400);setPlay(false);requestAnimationFrame(frame)}
 /* ---------- Panel ---------- */
 const GR=[['Camera and spring physics',[['Zoom scale','zoom',1.5,3.5,.1,v=>v.toFixed(1)+'x'],['Spring lerp factor','lerp',.01,.2,.01,v=>v.toFixed(2)],['3D tilt intensity','tilt',0,1,.05,v=>(v*100|0)+'%'],['Voice threshold (lower = more sensitive)','vthr',.02,.3,.01,v=>v.toFixed(2)]]],['Frame and styling',[['Screen padding','pad',0,120,1,v=>v+'px'],['Corner radius','rad',0,40,1,v=>v+'px'],['Drop shadow','shadow',0,1,.05,v=>(v*100|0)+'%'],['Neon border glow','glow',0,1,.05,v=>(v*100|0)+'%']]]];
-let h='<section><h3>Source</h3><div class="stack"><button id="rs">Record screen now</button><button id="up">Upload video file</button><button id="ld" class="btn-x">Load interactive demo animation</button><button id="psave">Save project (.json)</button><button id="popen">Open project</button><input type="file" id="pfile" accept=".json,application/json" hidden><button id="rst">Reset all settings</button></div></section>';
+let h='<section><h3>Source</h3><div class="stack"><button id="rs">Record screen now</button><button id="up">Upload video file</button><button id="ld" class="btn-x">Load interactive demo animation</button></div></section>';
 GR.forEach(([n,l],gi)=>{h+='<section><h3>'+n+'</h3>'+l.map(([a,k,mi,ma,st,f])=>'<div class="row"><span>'+a+'</span><output id="o_'+k+'">'+f(S[k])+'</output></div><input type="range" data-k="'+k+'" min="'+mi+'" max="'+ma+'" step="'+st+'" value="'+S[k]+'" aria-label="'+a+'">').join('');
  if(gi)h+='<div class="row"><span>Wallpaper</span></div><div class="two" id="wp" style="margin-top:6px">'+WALLS.map((w,i)=>'<button data-w="'+i+'"'+(i===S.wall?' class="on"':'')+'>'+w+'</button>').join('')+'</div><div class="two" style="margin-top:8px"><label style="font-size:12px;color:var(--mu)">Color 1<input type="color" id="c1" value="'+S.c1+'"></label><label style="font-size:12px;color:var(--mu)">Color 2<input type="color" id="c2" value="'+S.c2+'"></label></div><button id="bgb" style="margin-top:8px;width:100%">Upload background image</button><input type="file" id="bgf" accept="image/*" hidden>';h+='</section>'});
 h+='<section><h3>Zoom style</h3><div class="two" id="zm" style="grid-template-columns:1fr"><button data-m="cam" class="on">Camera zoom</button><button data-m="lens">Magnifier lens</button><button data-m="both">Camera + lens</button></div><p style="font-size:12px;color:var(--mu);margin-top:8px">Each zoom keeps the style you had selected when you recorded it. Changing the style only affects your next zooms.</p></section>';
@@ -295,7 +284,6 @@ document.querySelectorAll('#zm button').forEach(b=>b.onclick=()=>{S.zmode=b.data
 document.querySelectorAll('#fpsel button').forEach(b=>b.onclick=()=>{if(exporting)return toast('Change the frame rate before exporting');S.fps=+b.dataset.f;document.querySelectorAll('#fpsel button').forEach(x=>x.classList.toggle('on',x===b))});
 document.querySelectorAll('#qsel button').forEach(b=>b.onclick=()=>{if(exporting)return toast('Change the quality before exporting');S.br=+b.dataset.q;document.querySelectorAll('#qsel button').forEach(x=>x.classList.toggle('on',x===b));toast('Estimated size: ~'+(dur()*S.br/8/1048576).toFixed(1)+' MB')});
 document.querySelectorAll('#spd button').forEach(b=>b.onclick=()=>{const v=+b.dataset.s;S.lerp=v;document.querySelector('[data-k=lerp]').value=v;$('#o_lerp').textContent=v.toFixed(2);document.querySelectorAll('#spd button').forEach(x=>x.classList.toggle('on',x===b))});
-$('#rst').onclick=()=>{try{localStorage.removeItem('cz_s2')}catch(e){}location.reload()};
 document.querySelectorAll('#zm button').forEach(x=>x.classList.toggle('on',x.dataset.m===S.zmode));selWall(S.wall);
 document.querySelectorAll('#spd button').forEach(x=>x.classList.toggle('on',+x.dataset.s===S.lerp));
 
@@ -385,30 +373,6 @@ document.querySelectorAll('#ar button').forEach(b=>b.addEventListener('click',A.
 $('#an_rec').onchange=e=>A.setRec(e.target.checked);$('#a_rec').onclick=()=>A.setRec(!S.oRec);$('#an_rep').onchange=e=>S.oRep=e.target.checked?1:0;$('#an_tlc').onclick=A.tlClear;
 A.stat();A.sync();return A})();
 ['input','change','click'].forEach(ev=>addEventListener(ev,()=>setTimeout(save)));
-
-/* ---------- Landing + project files ---------- */
-(function(){const L=$('#land'),close=()=>{L.style.display='none';try{localStorage.setItem('cz_seen','1')}catch(e){}};
- try{if(localStorage.getItem('cz_seen')==='1')L.style.display='none'}catch(e){}
- $('#l_demo').onclick=()=>{close();$('#ld').click()};
- $('#l_rec').onclick=()=>{close();$('#rs').click()};
- $('#l_up').onclick=()=>{close();$('#up').click()};
- addEventListener('keydown',e=>{if(e.code==='Escape'&&L.style.display!=='none')close()});
- const PK=SAVE.concat(['c1','c2','br','fps']);
- $('#psave').onclick=()=>{const o={app:'cyberzoom',v:1,ratio,S:{},kf,boxes};PK.forEach(k=>o.S[k]=S[k]);
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:'application/json'}));a.download='zoomlit-project.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-  toast('Project saved. It holds zooms, censors and settings. Re-open the same video, then load this file.')};
- $('#popen').onclick=()=>$('#pfile').click();
- $('#pfile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
-  try{const o=JSON.parse(await f.text());if(o.app!=='cyberzoom'||!o.S)throw 0;
-   PK.forEach(k=>{if(k in o.S&&typeof o.S[k]===typeof S[k])S[k]=o.S[k]});
-   kf=Array.isArray(o.kf)?o.kf:[];boxes.length=0;(o.boxes||[]).forEach(b=>boxes.push(b));hist=[];
-   document.querySelectorAll('[data-k]').forEach(i=>{i.value=S[i.dataset.k];i.dispatchEvent(new Event('input'))});
-   document.querySelectorAll('[data-t]').forEach(i=>i.checked=!!S[i.dataset.t]);
-   document.querySelectorAll('[data-an]').forEach(i=>{i.value=S[i.dataset.an];i.dispatchEvent(new Event('input'))});
-   selWall(S.wall);$('#c1').value=S.c1;$('#c2').value=S.c2;ANNO.sync();
-   const rb=document.querySelector('#ar [data-r="'+o.ratio+'"]');rb&&o.ratio!==ratio&&rb.click();
-   marks();toast('Project loaded')}catch(err){toast('This is not a valid Zoomlit project file.')}};
-})();
 
 /* ---------- Fast export (WebCodecs, faster than real time) ---------- */
 (function(){
