@@ -189,8 +189,7 @@ footer{border-top:1px solid var(--ln);padding:32px 0;color:var(--mu);font-size:1
 
 <section id="contact"><div class="w"><div class="contact">
 <div class="rv"><span class="eyebrow">Contact us</span><h2>Questions, feedback or ideas?</h2>
-<p>We would love to hear how you use Zoomlit and what you would like to see next. Send a message and we will get back to you.</p>
-<a class="mail" id="mailLink" href="mailto:salemaymen814@gmail.com">salemaymen814@gmail.com</a></div>
+<p>We would love to hear how you use Zoomlit and what you would like to see next. Send a message with the form and we will get back to you.</p></div>
 <form class="rv" id="cf" novalidate>
 <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
 <div class="two"><label>Name<input name="name" autocomplete="name" required></label><label>Email<input name="email" type="email" autocomplete="email" required></label></div>
@@ -209,10 +208,11 @@ footer{border-top:1px solid var(--ln);padding:32px 0;color:var(--mu);font-size:1
 </div></footer>
 
 <script>
-/* Change this one line to your real contact address */
-var CONTACT_EMAIL="salemaymen814@gmail.com";
+/* Form target. After FormSubmit activation, paste your alias into FORM_ALIAS and the address is fully hidden. */
+var FORM_ALIAS="";
+var FORM_KEY="c2FsZW1heW1lbjgxNEBnbWFpbC5jb20=";
+var FORM_TO=FORM_ALIAS||atob(FORM_KEY);
 document.documentElement.classList.add("js");
-var ml=document.getElementById("mailLink");ml.href="mailto:"+CONTACT_EMAIL;ml.textContent=CONTACT_EMAIL;
 document.getElementById("yr").textContent=new Date().getFullYear();
 var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
 if(rm)document.querySelectorAll("video").forEach(function(v){v.removeAttribute("autoplay");v.pause();v.controls=true});
@@ -226,11 +226,11 @@ var n=f.name.value.trim(),m=f.email.value.trim(),t=f.msg.value.trim();
 if(!n||!/^\S+@\S+\.\S+$/.test(m)||!t){st.textContent="Please fill in your name, a valid email and a message.";return}
 if(f._honey.value)return;
 bt.disabled=true;bt.textContent="Sending…";st.textContent="";
-fetch("https://formsubmit.co/ajax/"+encodeURIComponent(CONTACT_EMAIL),{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
+fetch("https://formsubmit.co/ajax/"+encodeURIComponent(FORM_TO),{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
 body:JSON.stringify({name:n,email:m,message:t,_subject:"Zoomlit Studio message from "+n,_replyto:m,_template:"table",_captcha:"false"})})
 .then(function(r){return r.json().then(function(d){if(!r.ok||d.success==="false"||d.success===false)throw new Error(d.message||"failed");return d})})
 .then(function(){f.reset();st.textContent="Thank you! Your message was sent. We will reply soon."})
-.catch(function(){st.innerHTML="Sorry, that did not go through. Please email us at <a href=\"mailto:"+CONTACT_EMAIL+"\">"+CONTACT_EMAIL+"</a>."})
+.catch(function(){st.textContent="Sorry, that did not go through. Please try again in a moment."})
 .finally(function(){bt.disabled=false;bt.textContent="Send message"})});
 </script>
 </body></html>
