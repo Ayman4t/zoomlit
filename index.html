@@ -1,18 +1,31 @@
 <!DOCTYPE html>
-<html lang="en"><head> <meta name="google-site-verification" content="hUsIrxvXTyolwWRuVPgxGHDSMYPzHkof0N0yE699Uec" />
-    <meta charset="utf-8">
+<html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Zoomlit Studio: screen recordings that look directed</title>
-<meta name="description" content="Zoomlit Studio is a free, in-browser screen recording editor. Auto-zoom, spotlight, neon pen and one-click export for 16:9, 9:16 and 1:1.">
+<title>Zoomlit Studio: Free Screen Recording Editor with Auto-Zoom</title>
+<meta name="description" content="Zoomlit Studio is a free, in-browser screen recording editor. Auto-zoom that follows your cursor, spotlight, neon pen, censor brush and export in 16:9, 9:16 and 1:1. No install.">
+<meta name="keywords" content="screen recording editor, screen studio alternative, auto zoom screen recording, free screen recorder editor, cursor zoom, demo video maker">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="author" content="Zoomlit Studio">
 <meta name="theme-color" content="#07080c">
+<link rel="canonical" href="https://your-domain.com/">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Zoomlit Studio">
+<meta property="og:url" content="https://your-domain.com/">
 <meta property="og:title" content="Zoomlit Studio: screen recordings that look directed">
 <meta property="og:description" content="Drop in a recording. Zoomlit follows your cursor, zooms into the action and exports a polished video, all in your browser.">
-<meta property="og:image" content="assets/icons/icon-512.png">
+<meta property="og:image" content="https://your-domain.com/assets/og-image.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Zoomlit Studio logo with the tagline Screen recordings that look directed">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Zoomlit Studio: screen recordings that look directed">
+<meta name="twitter:description" content="Free in-browser screen recording editor with cursor-following zoom, spotlight and neon pen.">
+<meta name="twitter:image" content="https://your-domain.com/assets/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://your-domain.com/#website","url":"https://your-domain.com/","name":"Zoomlit Studio","description":"Free in-browser screen recording editor"},{"@type":"Organization","@id":"https://your-domain.com/#org","name":"Zoomlit Studio","url":"https://your-domain.com/","logo":"https://your-domain.com/assets/icons/icon-512.png"},{"@type":"SoftwareApplication","name":"Zoomlit Studio","url":"https://your-domain.com/app.html","applicationCategory":"MultimediaApplication","operatingSystem":"Any (web browser)","description":"Drop in a screen recording and Zoomlit follows your cursor, zooms into the action and exports a polished video, all in your browser.","image":"https://your-domain.com/assets/og-image.png","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Zoom that follows your cursor","Spotlight and neon pen","Censor brush","Export in 16:9, 9:16 and 1:1","30 or 60 FPS export","Webcam overlay"]}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -59,10 +72,11 @@ h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;back
 /* sections */
 section{padding:96px 0}
 .eyebrow{font:700 13px var(--d);letter-spacing:.14em;text-transform:uppercase;color:var(--vi);margin-bottom:14px;display:block}
-h2{font:700 clamp(30px,4.5vw,46px)/1.08 var(--d);letter-spacing:-.025em;margin-bottom:16px;max-width:18ch}
+h2,.row h3{font:700 clamp(30px,4.5vw,46px)/1.08 var(--d);letter-spacing:-.025em;margin-bottom:16px;max-width:18ch}
 .head{text-align:center;margin-bottom:24px}.head h2{margin:0 auto 14px}.head p{color:var(--mu);max-width:52ch;margin:0 auto}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:48px 0}
 .row:nth-child(even) .txt{order:2}
+.row h3{font-size:clamp(26px,3.6vw,36px);margin-bottom:14px;max-width:18ch}
 .row p{color:var(--mu);max-width:44ch}
 .row kbd{font:600 13px var(--d);border:1px solid var(--ln);background:var(--sf);border-radius:6px;padding:1px 7px}
 .vis{aspect-ratio:16/9;border-radius:22px;background:#0b0d14;position:relative;overflow:hidden;box-shadow:0 30px 60px -30px rgba(80,30,200,.45),0 0 0 1px var(--ln)}
@@ -126,24 +140,24 @@ footer{border-top:1px solid var(--ln);padding:32px 0;color:var(--mu);font-size:1
 <p class="sub">Drop in a recording. Zoomlit follows your cursor, zooms into the action and exports a polished video, all in your browser.</p>
 <div class="cta"><a class="btn" href="app.html">Open the editor</a><a class="btn ghost" href="#features">See what it does</a></div>
 <p class="note">Free to use. No install.</p>
-<div class="stage"><video src="assets/hero.mp4" autoplay muted loop playsinline preload="auto" aria-label="Recording of a dashboard demo: the view zooms in on the numbers and neon arrows point at the chart"></video></div>
+<div class="stage"><video src="assets/hero.mp4" width="1280" height="720" poster="assets/hero-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Recording of a dashboard demo: the view zooms in on the numbers and neon arrows point at the chart"></video></div>
 <div class="stats" role="list"><div role="listitem"><b>3</b><span>export formats</span></div><div role="listitem"><b>60</b><span>FPS export</span></div><div role="listitem"><b>0</b><span>installs needed</span></div><div role="listitem"><b>Free</b><span>to use</span></div></div>
 </header>
 </div>
 
-<section id="features"><div class="w">
-<div class="head rv"><span class="eyebrow">Features</span><h2>Everything a polished demo needs.</h2><p>Smart zoom, focus tools and export presets, built into one browser tab.</p></div>
+<section id="features" aria-labelledby="ft"><div class="w">
+<div class="head rv"><span class="eyebrow">Features</span><h2 id="ft">Everything a polished demo needs.</h2><p>Smart zoom, focus tools and export presets, built into one browser tab.</p></div>
 
-<div class="row rv"><div class="txt"><h2>Zoom that follows your cursor.</h2><p>Clicks and pauses trigger smooth zooms, so viewers always see what you are doing. Pick a zoom style, add a cursor glow, motion trail and click ripples.</p></div>
-<div class="vis"><video src="assets/zoom.mp4" autoplay muted loop playsinline preload="auto" aria-label="Magnifier lens zooming into a metric"></video></div></div>
+<div class="row rv"><div class="txt"><h3>Zoom that follows your cursor.</h3><p>Clicks and pauses trigger smooth zooms, so viewers always see what you are doing. Pick a zoom style, add a cursor glow, motion trail and click ripples.</p></div>
+<div class="vis"><video src="assets/zoom.mp4" poster="assets/zoom-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Magnifier lens zooming into a metric"></video></div></div>
 
-<div class="row rv"><div class="txt"><h2>Spotlight and neon pen.</h2><p>Dim everything except the part that matters, then draw arrows, circles and highlights that fade away on their own. Press <kbd>L</kbd> for spotlight and <kbd>P</kbd> for the pen.</p></div>
-<div class="vis"><video src="assets/ps.mp4" autoplay muted loop playsinline preload="auto" aria-label="A neon pen highlight, then a spotlight following the cursor"></video></div></div>
+<div class="row rv"><div class="txt"><h3>Spotlight and neon pen.</h3><p>Dim everything except the part that matters, then draw arrows, circles and highlights that fade away on their own. Press <kbd>L</kbd> for spotlight and <kbd>P</kbd> for the pen.</p></div>
+<div class="vis"><video src="assets/ps.mp4" poster="assets/ps-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="A neon pen highlight, then a spotlight following the cursor"></video></div></div>
 
-<div class="row rv"><div class="txt"><h2>Hide what you did not mean to show.</h2><p>Paint the censor brush over emails, tokens and names before you export. Covered areas stay covered for the whole clip.</p></div>
+<div class="row rv"><div class="txt"><h3>Hide what you did not mean to show.</h3><p>Paint the censor brush over emails, tokens and names before you export. Covered areas stay covered for the whole clip.</p></div>
 <div class="vis cens" aria-hidden="true"><span>Signed in as <i class="b"></i></span><span>API key <i class="b"></i></span><span>Invoice sent to <i class="b"></i></span></div></div>
 
-<div class="row rv"><div class="txt"><h2>One recording, every format.</h2><p>Export for the web in 16:9, for Reels and TikTok in 9:16, or square for feeds. Choose 30 or 60 FPS and a file size from high quality down to tiny.</p></div>
+<div class="row rv"><div class="txt"><h3>One recording, every format.</h3><p>Export for the web in 16:9, for Reels and TikTok in 9:16, or square for feeds. Choose 30 or 60 FPS and a file size from high quality down to tiny.</p></div>
 <div class="vis fmt" aria-hidden="true"><div style="width:44%;aspect-ratio:16/9">16:9</div><div style="width:17%;aspect-ratio:9/16">9:16</div><div style="width:24%;aspect-ratio:1">1:1</div></div></div>
 
 <div class="cards rv">
@@ -164,7 +178,7 @@ footer{border-top:1px solid var(--ln);padding:32px 0;color:var(--mu);font-size:1
 
 <section id="about" class="about"><div class="w"><div class="aboutgrid">
 <div class="rv"><span class="eyebrow">About us</span><h2>Making good demos should not need a studio.</h2>
-<p><strong>Zoomlit Studio is a free browser-based video editor made for creators made by AymanStack.</strong> We built it for people who record their screen to teach, sell, support or show off their work, and want the result to feel directed rather than captured.</p>
+<p><strong>Zoomlit Studio is a free, in-browser alternative to Screen Studio.</strong> We built it for people who record their screen to teach, sell, support or show off their work, and want the result to feel directed rather than captured.</p>
 <p>Everything happens in a browser tab: no installs, no accounts, no complicated timelines. You bring the recording, Zoomlit handles the camera moves and polish.</p>
 <a class="btn ghost" href="#contact">Get in touch</a></div>
 <div class="vals rv">
@@ -176,8 +190,9 @@ footer{border-top:1px solid var(--ln);padding:32px 0;color:var(--mu);font-size:1
 <section id="contact"><div class="w"><div class="contact">
 <div class="rv"><span class="eyebrow">Contact us</span><h2>Questions, feedback or ideas?</h2>
 <p>We would love to hear how you use Zoomlit and what you would like to see next. Send a message and we will get back to you.</p>
-<a class="mail" id="mailLink" href="mailto:hello@example.com">hello@example.com</a></div>
+<a class="mail" id="mailLink" href="mailto:salemaymen814@gmail.com">salemaymen814@gmail.com</a></div>
 <form class="rv" id="cf" novalidate>
+<input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
 <div class="two"><label>Name<input name="name" autocomplete="name" required></label><label>Email<input name="email" type="email" autocomplete="email" required></label></div>
 <label>Message<textarea name="msg" required></textarea></label>
 <button class="btn" type="submit">Send message</button>
@@ -195,7 +210,7 @@ footer{border-top:1px solid var(--ln);padding:32px 0;color:var(--mu);font-size:1
 
 <script>
 /* Change this one line to your real contact address */
-var CONTACT_EMAIL="hello@example.com";
+var CONTACT_EMAIL="salemaymen814@gmail.com";
 document.documentElement.classList.add("js");
 var ml=document.getElementById("mailLink");ml.href="mailto:"+CONTACT_EMAIL;ml.textContent=CONTACT_EMAIL;
 document.getElementById("yr").textContent=new Date().getFullYear();
@@ -205,11 +220,17 @@ else if("IntersectionObserver"in window){var o=new IntersectionObserver(function
 var rv=document.querySelectorAll(".rv");
 if(rm||!("IntersectionObserver"in window))rv.forEach(function(e){e.classList.add("in")});
 else{var r=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add("in");r.unobserve(x.target)}})},{threshold:.12});rv.forEach(function(e){r.observe(e)})}
-document.getElementById("cf").addEventListener("submit",function(e){e.preventDefault();var f=e.target,st=document.getElementById("st");
+document.getElementById("cf").addEventListener("submit",function(e){e.preventDefault();
+var f=e.target,st=document.getElementById("st"),bt=f.querySelector("button[type=submit]");
 var n=f.name.value.trim(),m=f.email.value.trim(),t=f.msg.value.trim();
 if(!n||!/^\S+@\S+\.\S+$/.test(m)||!t){st.textContent="Please fill in your name, a valid email and a message.";return}
-var body=t+"\n\n— "+n+" ("+m+")";
-location.href="mailto:"+CONTACT_EMAIL+"?subject="+encodeURIComponent("Zoomlit Studio message from "+n)+"&body="+encodeURIComponent(body);
-st.textContent="Opening your email app. If nothing opens, write to "+CONTACT_EMAIL+" directly."});
+if(f._honey.value)return;
+bt.disabled=true;bt.textContent="Sending…";st.textContent="";
+fetch("https://formsubmit.co/ajax/"+encodeURIComponent(CONTACT_EMAIL),{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
+body:JSON.stringify({name:n,email:m,message:t,_subject:"Zoomlit Studio message from "+n,_replyto:m,_template:"table",_captcha:"false"})})
+.then(function(r){return r.json().then(function(d){if(!r.ok||d.success==="false"||d.success===false)throw new Error(d.message||"failed");return d})})
+.then(function(){f.reset();st.textContent="Thank you! Your message was sent. We will reply soon."})
+.catch(function(){st.innerHTML="Sorry, that did not go through. Please email us at <a href=\"mailto:"+CONTACT_EMAIL+"\">"+CONTACT_EMAIL+"</a>."})
+.finally(function(){bt.disabled=false;bt.textContent="Send message"})});
 </script>
 </body></html>
