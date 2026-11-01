@@ -119,6 +119,8 @@ textarea{min-height:130px;resize:vertical}
 footer{border-top:1px solid var(--ln);padding:32px 0;color:var(--mu);font-size:14px}
 .foot{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
 .foot nav{height:auto;gap:22px}.foot a{text-decoration:none}.foot a:hover{color:var(--tx)}
+.madeby{text-align:right;line-height:1.7}.by{font:700 17px var(--d);letter-spacing:.02em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;border-bottom:2px solid var(--vi);padding-bottom:1px}
+@media(max-width:820px){.madeby{text-align:left}}
 .foot .logo{font-size:16px;color:var(--tx)}.foot .logo img{width:26px;height:26px;border-radius:7px}
 /* reveal */
 .js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
@@ -178,7 +180,7 @@ footer{border-top:1px solid var(--ln);padding:32px 0;color:var(--mu);font-size:1
 
 <section id="about" class="about"><div class="w"><div class="aboutgrid">
 <div class="rv"><span class="eyebrow">About us</span><h2>Making good demos should not need a studio.</h2>
-<p><strong>Zoomlit Studio is a free, in-browser screen recording editor for creators   Made by AymanStack.</strong> We built it for people who record their screen to teach, sell, support or show off their work, and want the result to feel directed rather than captured.</p>
+<p><strong>Zoomlit Studio is a free, in-browser alternative to Screen Studio.</strong> We built it for people who record their screen to teach, sell, support or show off their work, and want the result to feel directed rather than captured.</p>
 <p>Everything happens in a browser tab: no installs, no accounts, no complicated timelines. You bring the recording, Zoomlit handles the camera moves and polish.</p>
 <a class="btn ghost" href="#contact">Get in touch</a></div>
 <div class="vals rv">
@@ -204,7 +206,7 @@ footer{border-top:1px solid var(--ln);padding:32px 0;color:var(--mu);font-size:1
 <footer><div class="w foot">
 <a class="logo" href="#top"><img src="assets/icons/icon-192.png" alt="" width="26" height="26"><span><i>Zoom</i>lit Studio</span></a>
 <nav aria-label="Footer"><a href="#features">Features</a><a href="#about">About us</a><a href="#contact">Contact us</a><a href="app.html">Editor</a></nav>
-<span>© <span id="yr">2026</span> Zoomlit Studio. A free, in-browser alternative to Screen Studio.</span>
+<span class="madeby">Zoomlit Studio is a free, in-browser screen recording editor for creators.<br>Made by <strong class="by">AymanStack</strong></span>
 </div></footer>
 
 <script>
@@ -213,7 +215,6 @@ var FORM_ALIAS="";
 var FORM_KEY="c2FsZW1heW1lbjgxNEBnbWFpbC5jb20=";
 var FORM_TO=FORM_ALIAS||atob(FORM_KEY);
 document.documentElement.classList.add("js");
-document.getElementById("yr").textContent=new Date().getFullYear();
 var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
 if(rm)document.querySelectorAll("video").forEach(function(v){v.removeAttribute("autoplay");v.pause();v.controls=true});
 else if("IntersectionObserver"in window){var o=new IntersectionObserver(function(es){es.forEach(function(x){x.isIntersecting?x.target.play().catch(function(){}):x.target.pause()})},{threshold:.25});document.querySelectorAll("video").forEach(function(v){o.observe(v)})}
