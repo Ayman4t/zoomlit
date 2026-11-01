@@ -48,6 +48,7 @@ kbd{font:10.5px var(--mono);color:var(--mu);border:1px solid rgba(255,255,255,.1
 .swrow{display:flex;gap:8px;align-items:center;margin-top:10px}
 #a_pen2{display:none}#adock.pen-on #a_pen2{display:flex}
 @media(max-width:860px){#adock{top:auto;bottom:22px}}
+button:disabled,input:disabled{opacity:.4;cursor:not-allowed}
 </style></head><body>
 <header><div class="brand"><b>Zoom</b>lit Studio</div><div class="seg" id="ar"><button data-r="16:9" class="on">16:9 Desktop</button><button data-r="9:16">9:16 Reels/TikTok</button><button data-r="1:1">1:1 Square</button></div><div class="seg" id="fpsel" title="Export frame rate"><button data-f="30">30 FPS</button><button data-f="60" class="on">60 FPS</button></div><div class="seg" id="qsel" title="Export quality: lower = smaller file"><button data-q="14e6" class="on">High</button><button data-q="6e6">Medium</button><button data-q="2.5e6">Small</button><button data-q="1e6">Tiny</button></div><div class="hud" id="fps">—</div><button class="btn-x" id="auto">Export video (fast)</button></header>
 <aside id="side"></aside>
@@ -58,7 +59,7 @@ kbd{font:10.5px var(--mono);color:var(--mu);border:1px solid rgba(255,255,255,.1
 <script>
 const $=s=>document.querySelector(s),cv=$('#stage'),ctx=cv.getContext('2d'),vid=$('#vid');
 const SIZES={'16:9':[1280,720],'9:16':[720,1280],'1:1':[900,900]};let ratio='16:9';
-const S={fps:60,zmode:'cam',spot:0,keys:1,ksfx:1,voice:0,face:0,vthr:.08,cens:0,cstyle:'blur',zoom:2.2,lerp:.045,tilt:0,pad:44,rad:14,shadow:.55,glow:0,wall:9,sfxZoom:1,sfxClick:1,pass:1,mic:0,rip:1,cur:0,trail:0,neon:0,oSpot:0,oPen:0,oRec:0,oRep:1,oRad:.18,oDim:.85,oSoft:.55,oGlide:.6,oRing:1,oTool:'free',oCol:'#00f3ff',oW:5,oLife:1.8,br:14e6,c1:'#101626',c2:'#3b1a6e'};let bgImg=null;const SAVE=['zoom','lerp','tilt','vthr','pad','rad','shadow','glow','wall','zmode','sfxZoom','sfxClick','pass','spot','keys','ksfx','rip','cur','trail','neon','oRep','oRad','oDim','oSoft','oGlide','oRing','oTool','oCol','oW','oLife','c1','c2'];
+const S={fps:60,zmode:'cam',spot:0,keys:1,ksfx:1,voice:0,face:0,vthr:.08,cens:0,cstyle:'blur',zoom:2.2,lerp:.045,tilt:0,pad:44,rad:14,shadow:.55,glow:0,nobg:0,lensb:1.8,lensz:1,anch:1,wall:9,sfxZoom:1,sfxClick:1,pass:1,mic:0,rip:1,cur:0,trail:0,neon:0,oSpot:0,oPen:0,oRec:0,oRep:1,oRad:.18,oDim:.85,oSoft:.55,oGlide:.6,oRing:1,oTool:'free',oCol:'#00f3ff',oW:5,oLife:1.8,br:14e6,c1:'#101626',c2:'#3b1a6e'};let bgImg=null;const SAVE=['zoom','lerp','tilt','vthr','pad','rad','shadow','glow','nobg','lensb','lensz','anch','wall','zmode','sfxZoom','sfxClick','pass','spot','keys','ksfx','rip','cur','trail','neon','oRep','oRad','oDim','oSoft','oGlide','oRing','oTool','oCol','oW','oLife','c1','c2'];
 try{const o=JSON.parse(localStorage.getItem('cz_s2')||'{}');SAVE.forEach(k=>{if(k in o&&typeof o[k]===typeof S[k])S[k]=o[k]});if(S.wall===8)S.wall=0}catch(e){}
 function save(){try{const o={};SAVE.forEach(k=>o[k]=S[k]);localStorage.setItem('cz_s2',JSON.stringify(o))}catch(e){}}
 const cam={x:.5,y:.5,tx:.5,ty:.5,z:1,tz:1,vx:0,vy:0,sx:.5,sy:.5,sz:1,lx:.5,ly:.5,lo:0};let cd=null;const boxes=[],pc=document.createElement('canvas');
@@ -131,15 +132,15 @@ function wallpaper(i,W,H,tt){
  else if(i===7){const gr=ctx.createLinearGradient(0,0,W,H);gr.addColorStop(0,S.c1);gr.addColorStop(1,S.c2);ctx.fillStyle=gr;ctx.fillRect(0,0,W,H)}
  else{ctx.fillStyle=S.c1;ctx.fillRect(0,0,W,H);if(bgImg){const k=Math.max(W/bgImg.naturalWidth,H/bgImg.naturalHeight),w=bgImg.naturalWidth*k,h=bgImg.naturalHeight*k;ctx.drawImage(bgImg,(W-w)/2,(H-h)/2,w,h)}}}
 /* ---------- Render ---------- */
-function frameRect(){const p=S.pad,aw=cv.width-2*p,ah=cv.height-2*p;if(ratio==='9:16')return{fx:p,fy:p,fw:aw,fh:ah};const va=srcW()/srcH();let fw=aw,fh=aw/va;if(fh>ah){fh=ah;fw=ah*va}return{fx:(cv.width-fw)/2,fy:(cv.height-fh)/2,fw,fh}}
+function frameRect(){if(S.nobg)return{fx:0,fy:0,fw:cv.width,fh:cv.height};const p=S.pad,aw=cv.width-2*p,ah=cv.height-2*p;if(ratio==='9:16')return{fx:p,fy:p,fw:aw,fh:ah};const va=srcW()/srcH();let fw=aw,fh=aw/va;if(fh>ah){fh=ah;fw=ah*va}return{fx:(cv.width-fw)/2,fy:(cv.height-fh)/2,fw,fh}}
 function render(now){
- const W=cv.width,H=cv.height,tt=now/1000;wallpaper(S.wall,W,H,tt);
+ if(!exporting)syncCanvas();const W=cv.width,H=cv.height,tt=now/1000,RAD=S.nobg?0:S.rad,SHD=S.nobg?0:S.shadow;if(S.nobg)ctx.clearRect(0,0,W,H);else wallpaper(S.wall,W,H,tt);
  const{fx,fy,fw,fh}=frameRect(),sw=srcW(),sh=srcH(),fa=fw/fh;let bw,bh;if(fa>=sw/sh){bw=sw;bh=sw/fa}else{bh=sh;bw=sh*fa}
  const cw=bw/cam.z,ch=bh/cam.z;let cx=Math.min(sw-cw,Math.max(0,cam.x*sw-cw/2)),cy=Math.min(sh-ch,Math.max(0,cam.y*sh-ch/2));lastCrop={cx,cy,cw,ch,sw,sh};
  const toC=(nx,ny)=>[fx+(nx*sw-cx)/cw*fw,fy+(ny*sh-cy)/ch*fh];
- ctx.save();ctx.translate(W/2,H/2);const TL=S.trail?S.tilt:0,k=TL*.55,sk=Math.max(-.12,Math.min(.12,cam.vx*k*.1)),sy=Math.max(-.12,Math.min(.12,cam.vy*k*.1));ctx.transform(1-Math.abs(sk)*.3,sy,-sk,1-Math.abs(sy)*.3,0,0);ctx.translate(-W/2,-H/2);
- const sp=Math.min(1,Math.hypot(cam.vx,cam.vy)*TL*.8);if(sp>.04){ctx.save();ctx.globalAlpha=sp*.8;ctx.strokeStyle='#9d00ff';ctx.lineWidth=3;ctx.shadowColor='#9d00ff';ctx.shadowBlur=30;ctx.beginPath();ctx.roundRect(fx-cam.vx*TL*36,fy-cam.vy*TL*36,fw,fh,S.rad);ctx.stroke();ctx.restore()}
- ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=S.shadow*90;ctx.shadowOffsetY=S.shadow*34-sy*200;ctx.shadowOffsetX=-sk*200;ctx.beginPath();ctx.roundRect(fx,fy,fw,fh,S.rad);ctx.fillStyle='#000';ctx.fill();ctx.shadowColor='transparent';
+ ctx.save();ctx.translate(W/2,H/2);const TL=S.trail&&!S.nobg?S.tilt:0,k=TL*.55,sk=Math.max(-.12,Math.min(.12,cam.vx*k*.1)),sy=Math.max(-.12,Math.min(.12,cam.vy*k*.1));ctx.transform(1-Math.abs(sk)*.3,sy,-sk,1-Math.abs(sy)*.3,0,0);ctx.translate(-W/2,-H/2);
+ const sp=Math.min(1,Math.hypot(cam.vx,cam.vy)*TL*.8);if(sp>.04){ctx.save();ctx.globalAlpha=sp*.8;ctx.strokeStyle='#9d00ff';ctx.lineWidth=3;ctx.shadowColor='#9d00ff';ctx.shadowBlur=30;ctx.beginPath();ctx.roundRect(fx-cam.vx*TL*36,fy-cam.vy*TL*36,fw,fh,RAD);ctx.stroke();ctx.restore()}
+ ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=SHD*90;ctx.shadowOffsetY=SHD*34-sy*200;ctx.shadowOffsetX=-sk*200;ctx.beginPath();ctx.roundRect(fx,fy,fw,fh,RAD);ctx.fillStyle='#000';ctx.fill();ctx.shadowColor='transparent';
  ctx.save();ctx.clip();const el=srcEl();if(mode==='demo'||vid.readyState>=2)try{ctx.drawImage(el,cx,cy,cw,ch,fx,fy,fw,fh)}catch(e){}
  const nowMs=performance.now();ripples=ripples.filter(r=>nowMs-r.t<750);
  ripples.forEach(r=>{const a=(nowMs-r.t)/700,[px,py]=toC(r.nx,r.ny);for(let j=0;j<3;j++){const aj=a-j*.12;if(aj<=0)continue;ctx.beginPath();ctx.arc(px,py,10+aj*170*fw/1280*Math.max(1,cam.z*.6),0,7);ctx.strokeStyle=S.neon?(j%2?'#9d00ff':'#00f3ff'):'#ffffff';ctx.globalAlpha=(1-aj)*(S.neon?1:.55);ctx.lineWidth=S.neon?4-j:3-j*.8;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=S.neon?18:0;ctx.stroke()}ctx.globalAlpha=1;ctx.shadowBlur=0});
@@ -151,31 +152,35 @@ function render(now){
   ctx.restore();if(b.d){ctx.strokeStyle='#00f3ff';ctx.lineWidth=1.5;ctx.strokeRect(a,c,w,hh)}});
  if(S.spot){const am=Math.max(cam.lo*.6,Math.min(1,(cam.z-1)/Math.max(.2,az-1)));if(am>.01){const[qx,qy]=am==='lens'?toC(cam.lx,cam.ly):toC(cam.tx,cam.ty),r0=Math.min(fw,fh)*.24,g=ctx.createRadialGradient(qx,qy,r0*.6,qx,qy,r0*1.9);g.addColorStop(0,'rgba(3,5,12,0)');g.addColorStop(1,'rgba(3,5,12,'+.6*am+')');ctx.fillStyle=g;ctx.fillRect(fx,fy,fw,fh);
   if(am!=='lens'){ctx.beginPath();ctx.arc(qx,qy,r0*.6,0,7);ctx.strokeStyle='#00f3ff';ctx.lineWidth=2;ctx.globalAlpha=am*.7;ctx.shadowColor='#00f3ff';ctx.shadowBlur=20;ctx.stroke();ctx.globalAlpha=1;ctx.shadowBlur=0}}}
- if(cam.lo>.01){const[px,py]=toC(cam.lx,cam.ly),R=Math.min(fw,fh)*.2*cam.lo,m=am==='both'?1.8:az,w=2*R*cw/fw/m,h2=2*R*ch/fh/m,sx0=cx+(px-fx)/fw*cw,sy0=cy+(py-fy)/fh*ch;
+ if(cam.lo>.01){const[px,py]=toC(cam.lx,cam.ly),R=Math.min(fw,fh)*lensR()*cam.lo,m=am==='both'?S.lensb:az,w=2*R*cw/fw/m,h2=2*R*ch/fh/m,sx0=cx+(px-fx)/fw*cw,sy0=cy+(py-fy)/fh*ch;
   ctx.save();ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=34;ctx.shadowOffsetY=12;ctx.beginPath();ctx.arc(px,py,R,0,7);ctx.fillStyle='#000';ctx.fill();ctx.shadowColor='transparent';ctx.clip();
   try{ctx.drawImage(el,sx0-w/2,sy0-h2/2,w,h2,px-R,py-R,2*R,2*R)}catch(e){}
   const gl=ctx.createRadialGradient(px-R*.4,py-R*.5,R*.05,px,py,R);gl.addColorStop(0,'rgba(255,255,255,.28)');gl.addColorStop(.5,'rgba(255,255,255,.04)');gl.addColorStop(1,'rgba(0,0,0,.18)');ctx.fillStyle=gl;ctx.fillRect(px-R,py-R,2*R,2*R);ctx.restore();
   ctx.beginPath();ctx.arc(px,py,R,0,7);ctx.strokeStyle='rgba(255,255,255,.75)';ctx.lineWidth=3;ctx.shadowColor='#00f3ff';ctx.shadowBlur=14;ctx.stroke();ctx.shadowBlur=0}
  ctx.restore();
- if(S.neon&&S.glow>0){const gr=ctx.createLinearGradient(fx,fy,fx+fw,fy+fh);gr.addColorStop(0,'#00f3ff');gr.addColorStop(1,'#9d00ff');ctx.beginPath();ctx.roundRect(fx,fy,fw,fh,S.rad);ctx.strokeStyle=gr;ctx.lineWidth=2;ctx.shadowColor='#00f3ff';ctx.shadowBlur=S.glow*36;ctx.globalAlpha=.4+S.glow*.6;ctx.stroke();ctx.globalAlpha=1;ctx.shadowBlur=0}
+ if(S.neon&&S.glow>0&&!S.nobg){const gr=ctx.createLinearGradient(fx,fy,fx+fw,fy+fh);gr.addColorStop(0,'#00f3ff');gr.addColorStop(1,'#9d00ff');ctx.beginPath();ctx.roundRect(fx,fy,fw,fh,S.rad);ctx.strokeStyle=gr;ctx.lineWidth=2;ctx.shadowColor='#00f3ff';ctx.shadowBlur=S.glow*36;ctx.globalAlpha=.4+S.glow*.6;ctx.stroke();ctx.globalAlpha=1;ctx.shadowBlur=0}
  ctx.restore();ANNO.spot(ctx,W,H,now);drawFace(W,H,toC);ANNO.pen(ctx,W,H,now)}
 /* ---------- Director, keyframes, camera ---------- */
 function ripple(nx,ny){if(!S.rip)return;ripples.push({nx,ny,t:performance.now()})}
-function dirStartFn(q){if(dir)return;audio.init();dir=true;dm=S.zmode;dzm=S.zoom;dirStart=getT();cur=[];lastK=-1;if(!q){if(S.sfxClick)audio.playClickPop();ripple(ptr.x,ptr.y)}}
+function dirStartFn(q){if(dir)return;audio.init();dir=true;dm=S.zmode;dzm=S.zoom;dirStart=getT();cur=[];lastK=-1;if(!q){if(S.sfxClick)audio.playClickPop();const mp=mouseSrc();ripple(mp[0],mp[1])}}
 function dirEnd(){if(!dir)return;dir=false;if(playing){const e=getT();cur.push({t:e,x:cam.tx,y:cam.ty,z:1,m:dm});hist.push(JSON.stringify(kf));if(hist.length>30)hist.shift();kf=kf.filter(k=>k.t<dirStart||k.t>e).concat(cur).sort((a,b)=>a.t-b.t);marks()}cur=[]}
-let lastPt=null;function setPtr(e){lastPt={clientX:e.clientX,clientY:e.clientY};const r=cv.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*cv.width,py=(e.clientY-r.top)/r.height*cv.height,f=frameRect();ptr.x=Math.min(1,Math.max(0,(px-f.fx)/f.fw));ptr.y=Math.min(1,Math.max(0,(py-f.fy)/f.fh))}
+let lastPt=null;function lensR(){return Math.min(.46,Math.max(.08,.2*S.lensz*Math.pow(az/2.2,.8)))}
+function mouseSrc(){return lastPt?toSrc(lastPt):[ptr.x,ptr.y]}
+function viewSpan(z){const sw=srcW(),sh=srcH(),f=frameRect(),fa=f.fw/f.fh;let bw,bh;if(fa>=sw/sh){bw=sw;bh=sw/fa}else{bh=sh;bw=sh*fa}return{sx:bw/sw/z,sy:bh/sh/z}}
+function glide(e){const DZ=.15,a=Math.abs(e);return a<=DZ?0:Math.sign(e)*Math.min(1,(a-DZ)/(.4-DZ))}
+function setPtr(e){lastPt={clientX:e.clientX,clientY:e.clientY};const r=cv.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*cv.width,py=(e.clientY-r.top)/r.height*cv.height,f=frameRect();ptr.x=Math.min(1,Math.max(0,(px-f.fx)/f.fw));ptr.y=Math.min(1,Math.max(0,(py-f.fy)/f.fh))}
 cv.addEventListener('pointerdown',e=>{if(e.button!==0)return;if(ANNO.down(e))return;if(S.cens){const p=toSrc(e);cd=[p[0],p[1],p[0],p[1]];cv.setPointerCapture(e.pointerId);return}cv.setPointerCapture(e.pointerId);setPtr(e);dirStartFn()});
 cv.addEventListener('pointermove',e=>{setPtr(e);if(cd){const p=toSrc(e);cd[2]=p[0];cd[3]=p[1]}});
 addEventListener('pointerup',()=>{if(cd){const[a,b,c,d]=cd;if(Math.abs(c-a)>.005&&Math.abs(d-b)>.005)boxes.push({x0:Math.min(a,c),y0:Math.min(b,d),x1:Math.max(a,c),y1:Math.max(b,d),s:S.cstyle});cd=null;return}dirEnd()});addEventListener('blur',dirEnd);
 addEventListener('keydown',e=>{if((e.code==='KeyZ'||e.code==='Space')&&!e.ctrlKey&&!e.metaKey&&!e.repeat&&!(e.target.tagName==='INPUT'&&e.target.type!=='range')){e.preventDefault();dirStartFn()}});
 addEventListener('keyup',e=>{if(e.code==='KeyZ'||e.code==='Space')dirEnd()});
-let foc=null;
+let foc=null,fm=null;
 function step(dt){
  const ct=getT();let z=1,x=.5,y=.5,lt=null;
  if(!dir)foc=null;
  if(dir){z=dzm;am=dm;az=dzm;x=ptr.x;y=ptr.y;
   /* Screen-Studio style: camera holds still while the cursor moves inside a dead-zone, and only glides when the cursor nears the edge of the zoomed view */
-  if(!foc)foc={x:ptr.x,y:ptr.y};const hw=.5/z,dz=hw*.5;foc.x=Math.min(1-hw,Math.max(hw,Math.min(ptr.x+dz,Math.max(ptr.x-dz,foc.x))));foc.y=Math.min(1-hw,Math.max(hw,Math.min(ptr.y+dz,Math.max(ptr.y-dz,foc.y))));x=foc.x;y=foc.y;lt=lastPt?toSrc(lastPt):[ptr.x,ptr.y];if(playing&&ct-lastK>.05){cur.push({t:ct,x,y,z,m:dm,lx:lt[0],ly:lt[1]});lastK=ct}}
+  if(S.anch){/* zoom toward the mouse: the spot you point at stays under the pointer; the camera holds still, and only glides when you move the pointer away from where you pressed */const v=viewSpan(z),hx=v.sx/2,hy=v.sy/2;if(!foc){const P=mouseSrc();foc={x:P[0]-(ptr.x-.5)*v.sx,y:P[1]-(ptr.y-.5)*v.sy};fm={x:ptr.x,y:ptr.y}}else{foc.x+=glide(ptr.x-fm.x)*v.sx*1.2*dt;foc.y+=glide(ptr.y-fm.y)*v.sy*1.2*dt}foc.x=Math.min(1-hx,Math.max(hx,foc.x));foc.y=Math.min(1-hy,Math.max(hy,foc.y));x=foc.x;y=foc.y}else{if(!foc)foc={x:ptr.x,y:ptr.y};const hw=.5/z,dz=hw*.5;foc.x=Math.min(1-hw,Math.max(hw,Math.min(ptr.x+dz,Math.max(ptr.x-dz,foc.x))));foc.y=Math.min(1-hw,Math.max(hw,Math.min(ptr.y+dz,Math.max(ptr.y-dz,foc.y))));x=foc.x;y=foc.y;}lt=lastPt?toSrc(lastPt):[ptr.x,ptr.y];if(playing&&ct-lastK>.05){cur.push({t:ct,x,y,z,m:dm,lx:lt[0],ly:lt[1]});lastK=ct}}
  else{let q=null;for(let i=kf.length-1;i>=0;i--)if(kf[i].t<=ct){q=kf[i];break}if(q){z=q.z;x=q.x;y=q.y;lt=[q.lx==null?q.x:q.lx,q.ly==null?q.y:q.ly];if(q.z>1.001){am=q.m||S.zmode;az=q.z}}}
  const dc2=mode==='demo'?demoCursor(ct):null;
  if(z<=1.001&&ratio==='9:16'){x=dc2?dc2.x/1280:ptr.x;y=.5}
@@ -245,11 +250,11 @@ function resetOv(){$('#dl').style.display='none';$('#oh').textContent='Rendering
 $('#cx').onclick=()=>{$('#ov').style.display='none';if(exporting){exporting=null;try{rec.onstop=null;rec.stop()}catch(e){}}resetOv()};
 function finish(){exporting=null;$('#ov').style.display='none';setTimeout(()=>{rec.stop()},400);setPlay(false);requestAnimationFrame(frame)}
 /* ---------- Panel ---------- */
-const GR=[['Camera and spring physics',[['Zoom scale','zoom',1.5,3.5,.1,v=>v.toFixed(1)+'x'],['Spring lerp factor','lerp',.01,.2,.01,v=>v.toFixed(2)],['3D tilt intensity','tilt',0,1,.05,v=>(v*100|0)+'%'],['Voice threshold (lower = more sensitive)','vthr',.02,.3,.01,v=>v.toFixed(2)]]],['Frame and styling',[['Screen padding','pad',0,120,1,v=>v+'px'],['Corner radius','rad',0,40,1,v=>v+'px'],['Drop shadow','shadow',0,1,.05,v=>(v*100|0)+'%'],['Neon border glow','glow',0,1,.05,v=>(v*100|0)+'%']]]];
+const GR=[['Camera and spring physics',[['Zoom scale','zoom',1.5,5,.1,v=>v.toFixed(1)+'x'],['Lens boost (Camera + lens mode)','lensb',1.2,4,.1,v=>v.toFixed(1)+'x'],['Lens size (grows with zoom scale)','lensz',.5,2,.05,v=>v.toFixed(2)+'x'],['Spring lerp factor','lerp',.01,.2,.01,v=>v.toFixed(2)],['3D tilt intensity','tilt',0,1,.05,v=>(v*100|0)+'%'],['Voice threshold (lower = more sensitive)','vthr',.02,.3,.01,v=>v.toFixed(2)]]],['Frame and styling',[['Screen padding','pad',0,120,1,v=>v+'px'],['Corner radius','rad',0,40,1,v=>v+'px'],['Drop shadow','shadow',0,1,.05,v=>(v*100|0)+'%'],['Neon border glow','glow',0,1,.05,v=>(v*100|0)+'%']]]];
 let h='<section><h3>Source</h3><div class="stack"><button id="rs">Record screen now</button><button id="up">Upload video file</button><button id="ld" class="btn-x">Load interactive demo animation</button></div></section>';
-GR.forEach(([n,l],gi)=>{h+='<section><h3>'+n+'</h3>'+l.map(([a,k,mi,ma,st,f])=>'<div class="row"><span>'+a+'</span><output id="o_'+k+'">'+f(S[k])+'</output></div><input type="range" data-k="'+k+'" min="'+mi+'" max="'+ma+'" step="'+st+'" value="'+S[k]+'" aria-label="'+a+'">').join('');
+GR.forEach(([n,l],gi)=>{h+='<section><h3>'+n+'</h3>'+(gi?'<label class="tg" style="margin-top:0"><input type="checkbox" id="nobg"'+(S.nobg?' checked':'')+'>Delete background (export only my video)</label><p style="font-size:12px;color:var(--mu);margin:6px 0 10px">Removes the wallpaper, padding, shadow and rounded corners. The output has the same shape as your uploaded video.</p>':'')+l.map(([a,k,mi,ma,st,f])=>'<div class="row"><span>'+a+'</span><output id="o_'+k+'">'+f(S[k])+'</output></div><input type="range" data-k="'+k+'" min="'+mi+'" max="'+ma+'" step="'+st+'" value="'+S[k]+'" aria-label="'+a+'">').join('');
  if(gi)h+='<div class="row"><span>Wallpaper</span></div><div class="two" id="wp" style="margin-top:6px">'+WALLS.map((w,i)=>'<button data-w="'+i+'"'+(i===S.wall?' class="on"':'')+'>'+w+'</button>').join('')+'</div><div class="two" style="margin-top:8px"><label style="font-size:12px;color:var(--mu)">Color 1<input type="color" id="c1" value="'+S.c1+'"></label><label style="font-size:12px;color:var(--mu)">Color 2<input type="color" id="c2" value="'+S.c2+'"></label></div><button id="bgb" style="margin-top:8px;width:100%">Upload background image</button><input type="file" id="bgf" accept="image/*" hidden>';h+='</section>'});
-h+='<section><h3>Zoom style</h3><div class="two" id="zm" style="grid-template-columns:1fr"><button data-m="cam" class="on">Camera zoom</button><button data-m="lens">Magnifier lens</button><button data-m="both">Camera + lens</button></div><p style="font-size:12px;color:var(--mu);margin-top:8px">Each zoom keeps the style you had selected when you recorded it. Changing the style only affects your next zooms.</p></section>';
+h+='<section><h3>Zoom style</h3><div class="two" id="zm" style="grid-template-columns:1fr"><button data-m="cam" class="on">Camera zoom</button><button data-m="lens">Magnifier lens</button><button data-m="both">Camera + lens</button></div><label class="tg"><input type="checkbox" id="anch"'+(S.anch?' checked':'')+'>Zoom toward the mouse</label><p style="font-size:12px;color:var(--mu);margin-top:6px">On: the spot you point at stays under the mouse. Off: the zoom centers on that spot.</p><p style="font-size:12px;color:var(--mu);margin-top:8px">Each zoom keeps the style you had selected when you recorded it. Changing the style only affects your next zooms.</p></section>';
 h+='<section><h3>Privacy censor brush</h3><div class="stack"><button id="cbtn">Censor brush: off</button><div class="two" id="cst"><button data-c="blur" class="on">Frosted blur</button><button data-c="pix">Pixels</button></div><button id="cclr">Clear censors</button></div></section>';
 h+='<section><h3>Visual effects (all optional)</h3>'+[['spot','Cinematic spotlight dimmer'],['rip','Click ripples'],['cur','Cursor glow while zooming'],['trail','Motion tilt and streak'],['neon','Neon border glow']].map(([k,l])=>'<label class="tg"><input type="checkbox" data-t="'+k+'"'+(S[k]?' checked':'')+'>'+l+'</label>').join('')+'</section>';
 h+='<section><h3>Audio FX and smart features</h3>'+[['sfxZoom','Auto-zoom whoosh SFX'],['sfxClick','Crisp mouse click SFX'],['pass','Source and system audio pass-through'],['mic','Microphone input'],['voice','Voice-activated auto-zoom'],['face','Webcam HUD facecam'],['keys','Keystroke visualizer'],['ksfx','Mechanical key SFX']].map(([k,l])=>'<label class="tg"><input type="checkbox" data-t="'+k+'"'+(S[k]?' checked':'')+'>'+l+'</label>').join('')+'</section>';
@@ -260,6 +265,8 @@ function selWall(n){S.wall=n;document.querySelectorAll('[data-w]').forEach(x=>x.
 document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{selWall(+b.dataset.w);if(S.wall===8&&!bgImg)$('#bgf').click()});
 $('#c1').oninput=e=>{S.c1=e.target.value;if(S.wall<6)selWall(6)};$('#c2').oninput=e=>{S.c2=e.target.value;if(S.wall<7)selWall(7)};
 $('#bgb').onclick=()=>$('#bgf').click();
+function applyNoBg(){const on=!!S.nobg;document.querySelectorAll('[data-k="pad"],[data-k="rad"],[data-k="shadow"],[data-k="glow"],#wp button,#c1,#c2,#bgb,#ar button').forEach(e=>e.disabled=on);['#wp','#ar'].forEach(q=>$(q).style.opacity=on?.4:1)}
+$('#nobg').onchange=e=>{if(exporting){e.target.checked=!!S.nobg;return toast('Finish the export before changing the background')}S.nobg=e.target.checked?1:0;applyNoBg();toast(S.nobg?'Background deleted: the output is just your video':'Background restored')};applyNoBg();
 $('#bgf').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{bgImg=im;selWall(8)};im.onerror=()=>toast('This image cannot be loaded');im.src=URL.createObjectURL(f)};
 document.querySelectorAll('[data-t]').forEach(i=>i.onchange=async()=>{const k=i.dataset.t;S[k]=i.checked?1:0;audio.init();if(k==='pass')audio.vg.gain.value=S.pass;
  if(k==='voice'){if(i.checked&&!voice.an)await voiceInit(i);else if(!i.checked&&voice.on){voice.on=0;dirEnd()}}
@@ -277,9 +284,11 @@ let sr=null;$('#rs').onclick=async()=>{if(sr){sr.stop();return}
 document.querySelectorAll('#ar button').forEach(b=>b.onclick=()=>{if(exporting)return toast('Finish the export before changing the aspect ratio');ratio=b.dataset.r;[cv.width,cv.height]=SIZES[ratio];document.querySelectorAll('#ar button').forEach(x=>x.classList.toggle('on',x===b));fit()});
 function fit(){const r=$('#main').getBoundingClientRect(),a=cv.width/cv.height;let w=r.width-28,hh=w/a;if(hh>r.height-28){hh=r.height-28;w=hh*a}cv.style.width=Math.max(120,w)+'px';cv.style.height=Math.max(80,hh)+'px'}
 new ResizeObserver(fit).observe($('#main'));fit();
+function syncCanvas(){let w,h;if(S.nobg){const sw=srcW(),sh=srcH(),k=Math.min(1,1920/Math.max(sw,sh));w=Math.max(2,Math.round(sw*k/2)*2);h=Math.max(2,Math.round(sh*k/2)*2)}else[w,h]=SIZES[ratio];if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;fit()}}
 $('#cbtn').onclick=()=>{S.cens=S.cens?0:1;$('#cbtn').textContent='Censor brush: '+(S.cens?'ON — drag on the video':'off');$('#cbtn').classList.toggle('on',!!S.cens);cv.style.cursor=S.cens?'cell':'crosshair'};
 document.querySelectorAll('#cst button').forEach(b=>b.onclick=()=>{S.cstyle=b.dataset.c;document.querySelectorAll('#cst button').forEach(x=>x.classList.toggle('on',x===b))});
 $('#cclr').onclick=()=>{boxes.length=0};
+$('#anch').onchange=e=>{S.anch=e.target.checked?1:0;toast(S.anch?'Zoom now stays under the mouse':'Zoom now centers on the spot you press')};
 document.querySelectorAll('#zm button').forEach(b=>b.onclick=()=>{S.zmode=b.dataset.m;document.querySelectorAll('#zm button').forEach(x=>x.classList.toggle('on',x===b))});
 document.querySelectorAll('#fpsel button').forEach(b=>b.onclick=()=>{if(exporting)return toast('Change the frame rate before exporting');S.fps=+b.dataset.f;document.querySelectorAll('#fpsel button').forEach(x=>x.classList.toggle('on',x===b))});
 document.querySelectorAll('#qsel button').forEach(b=>b.onclick=()=>{if(exporting)return toast('Change the quality before exporting');S.br=+b.dataset.q;document.querySelectorAll('#qsel button').forEach(x=>x.classList.toggle('on',x===b));toast('Estimated size: ~'+(dur()*S.br/8/1048576).toFixed(1)+' MB')});
